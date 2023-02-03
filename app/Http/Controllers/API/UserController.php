@@ -32,8 +32,8 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-   
-      /**
+
+    /**
      * @OA\Post(
      *      path="/api/users",
      *      operationId="store",
@@ -80,6 +80,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
+     *    security={{"bearer_token":{}}}, 
      *    path="/api/users/{id}",
      *    operationId="show",
      *    tags={"Users"},
@@ -154,7 +155,7 @@ class UserController extends Controller
         return response()->json();
     }
 
-     /**
+    /**
      * @OA\Delete(
      *    path="/api/users/{id}",
      *    operationId="destroy",

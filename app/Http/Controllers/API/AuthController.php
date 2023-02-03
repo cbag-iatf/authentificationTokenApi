@@ -14,6 +14,30 @@ class AuthController extends Controller
 {
     //
 
+      /**
+     * @OA\Post(
+     *      path="/api/register",
+     *      operationId="signup",
+     *      tags={"Connexion"},
+     *      summary="Register",
+     *      description="Register",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *            required={"name","email", "password"},
+     *            @OA\Property(property="name", type="string", format="string", example="User Name"),
+     *            @OA\Property(property="email", type="string", format="string", example="User Email"),
+     *            @OA\Property(property="password", type="string", format="string", example="Password"),
+     *         ),
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *  )
+     */
     public function signup(Request $request)
     {
         // dd('cbag');
@@ -36,7 +60,7 @@ class AuthController extends Controller
                     'password' => Hash::make($request->password)
                 ]);
 
-                $reponse =   response()->json(['status' => 'false', 'message' => 'User crée avec succés', 'data' => [$user]], 433);
+                $reponse =   response()->json(['status' => true, 'message' => 'User crée avec succés', 'data' => [$user]], 200);
             }
 
             return $reponse;
@@ -45,6 +69,31 @@ class AuthController extends Controller
         }
     }
 
+
+    /**
+     * @OA\Post(
+     *      path="/api/login",
+     *      operationId="login",
+     *      tags={"Connexion"},
+     *      summary="Connexion",
+     *      description="Connexion",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *            required={"email", "password"},
+     *            @OA\Property(property="email", type="string", format="string", example="User Email"),
+     *            @OA\Property(property="password", type="string", format="string", example="Password"),
+     *         ),
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", example=""),
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *  )
+     */
     public function login(Request $request)
     {
         try {
@@ -72,23 +121,43 @@ class AuthController extends Controller
                         return response()->json(['status' => false, 'message' => 'Login ou Mot de passe incorrect', 'data' => []], 433);
                     }
                 }
-
-               
             }
         } catch (\Exception $e) {
             return response()->json(['status' => true, 'message' => $e->getMessage(), 'data' => []], 500);
         }
     }
 
+
+    /**
+     * @OA\Post(
+     *    security={{"bearer_token":{}}}, 
+     *      path="/api/logout",
+     *      operationId="logout",
+     *      tags={"Connexion"},
+     *      summary="Logout",
+     *      description="Logout",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *            required={"id"},
+     *            @OA\Property(property="id", type="string", format="string", example="User "),
+     *         ),
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *  )
+     */
     public function logout(Request $request)
     {
         try {
-            
+
             $request->user()->currentAccessToken()->delete();
             $request->user()->tokens()->delete();
             return response()->json(['status' => true, 'message' => 'Logout avec Succés', 'data' => []], 500);
-             
-            
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage(), 'data' => []], 500);
         }
