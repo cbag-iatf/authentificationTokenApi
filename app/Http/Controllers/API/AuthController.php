@@ -136,6 +136,7 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        // dd($token);
         return $this->respondWithToken($token);
         // try {
         //     $validation = Validator::make($request->all(), [
@@ -198,7 +199,7 @@ class AuthController extends Controller
     {
         auth()->logout();
         return response()->json(['message' => 'User successfully signed out']);
-        
+
         // try {
 
         //     $request->user()->currentAccessToken()->delete();
