@@ -188,11 +188,12 @@ class UserController extends Controller
 
     public function getProfile(Request $request)
     {
-        try {
-            $user = User::find($request->user()->id);
-            return response()->json(['status' => true, 'message' => 'Logged In', 'data' => [$user]], 200);
-        } catch (\Exception $e) {
-            return response()->json(['status' => true, 'message' => $e->getMessage(), 'data' => []], 500);
-        }
+        return response()->json(auth()->user());
+        // try {
+        //     $user = User::find($request->user()->id);
+        //     return response()->json(['status' => true, 'message' => 'Logged In', 'data' => [$user]], 200);
+        // } catch (\Exception $e) {
+        //     return response()->json(['status' => true, 'message' => $e->getMessage(), 'data' => []], 500);
+        // }
     }
 }
