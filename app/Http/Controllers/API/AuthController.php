@@ -198,6 +198,7 @@ class AuthController extends Controller
     {
         auth()->logout();
         return response()->json(['message' => 'User successfully signed out']);
+        
         // try {
 
         //     $request->user()->currentAccessToken()->delete();
